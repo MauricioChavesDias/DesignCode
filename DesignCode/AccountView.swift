@@ -8,9 +8,12 @@
 import SwiftUI
 
 struct AccountView: View {
+    @State var isDeleted = false
+    
     var body: some View {
         NavigationView {
             List {
+                //MARK: - Header
                 VStack {
                     Image(systemName: "person.crop.circle.fill.badge.checkmark")
                         .symbolVariant(.circle.fill)
@@ -38,6 +41,8 @@ struct AccountView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
+                
+                //MARK: - Sections: Settings - Billing - Help
                 Section {
                     NavigationLink {ContentView()} label: {
                         Label("Settings", systemImage: "gear")
@@ -53,15 +58,28 @@ struct AccountView: View {
                 .listRowSeparatorTint(.blue)
                 .listRowSeparator(.hidden)
  
+                //MARK: - Sections: Website, Youtube...
                 Section {
-                    Link(destination: URL(string: "https://apple.com")!) {
-                        HStack {
-                            Label("Website", systemImage: "house")
-                            Spacer()
-                            Image(systemName: "link")
-                                .foregroundColor(.secondary)
+                    if !isDeleted {
+                        Link(destination: URL(string: "https://apple.com")!) {
+                            HStack {
+                                Label("Website", systemImage: "house")
+                                Spacer()
+                                Image(systemName: "link")
+                                    .foregroundColor(.secondary)
+                            }
+                        }.swipeActions(edge: .leading, allowsFullSwipe: true){
+                            Button(action: { isDeleted = true }) {
+                                Label("Delete", systemImage: "trash")
+                            }.tint(.red)
+                            Button {} label: {
+                                Label("Pin", systemImage: "pin")
+                            }
+                            .tint(.yellow)
+                            
                         }
                     }
+                    
                     Link(destination: URL(string: "https://youtube.com")!) {
                         HStack {
                             Label("Youtube", systemImage: "tv")
